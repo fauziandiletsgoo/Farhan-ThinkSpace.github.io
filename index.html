@@ -8,27 +8,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- Variables & Reset (Default: Dark Blue Theme) --- */
+        /* --- Variables & Reset --- */
         :root {
-            --primary-color: #0A192F; /* Navy Blue */
+            --primary-color: #0A192F; 
             --secondary-color: #112240;
-            --accent-blue: #3B82F6; /* Terang untuk latar gelap */
+            --accent-blue: #64FFDA; 
             --bg-color: #0A192F;
             --bg-light: #112240;
             --text-color: #CCD6F6;
             --text-light: #8892B0;
             --white: #112240;
-            --transition: all 0.3s ease;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         /* Light Mode Variables */
         .light-mode {
             --bg-color: #F8F9FA;
-            --bg-light: #E9ECEF;
-            --text-color: #333333;
-            --text-light: #666666;
+            --bg-light: #FFFFFF;
+            --text-color: #2B3238;
+            --text-light: #606770;
             --white: #FFFFFF;
-            --accent-blue: #2C74B3;
+            --accent-blue: #0070F3; 
+            --card-border: rgba(0, 0, 0, 0.08);
         }
 
         * {
@@ -48,11 +50,11 @@
 
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
+        .mt-4 { margin-top: 2rem; }
         .mt-5 { margin-top: 3rem; }
-        .text-left { text-align: left !important; }
         .text-accent { color: var(--accent-blue); }
 
-        /* --- Navbar --- */
+        /* --- Navbar (Glassmorphism) --- */
         nav {
             position: fixed;
             top: 0;
@@ -64,9 +66,16 @@
         }
 
         nav.scrolled {
-            background: var(--bg-light);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            background: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             padding: 15px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .light-mode nav.scrolled {
+            background: rgba(248, 249, 250, 0.85);
         }
 
         .nav-container {
@@ -82,7 +91,7 @@
         .logo span { color: var(--text-color); }
 
         .nav-links { display: flex; gap: 20px; }
-        .nav-links a { font-weight: 500; transition: var(--transition); }
+        .nav-links a { font-weight: 500; font-size: 0.95rem; transition: var(--transition); }
         .nav-links a:hover { color: var(--accent-blue); }
 
         .theme-btn {
@@ -93,23 +102,38 @@
             cursor: pointer;
             transition: var(--transition);
         }
-        .theme-btn:hover { color: var(--accent-blue); }
+        .theme-btn:hover { color: var(--accent-blue); transform: scale(1.1); }
 
         .hamburger { display: none; font-size: 1.5rem; cursor: pointer; color: var(--text-color); }
 
         /* --- Sections & Container --- */
         .section { padding: 100px 20px; }
-        .bg-light { background-color: var(--bg-light); }
+        .bg-light { background-color: var(--bg-light); border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); }
         .container { max-width: 1100px; margin: auto; }
         
         .section-title {
             text-align: center;
             font-size: 2.2rem;
-            margin-bottom: 40px;
-            color: var(--text-color); /* Default terang di latar gelap */
-            position: relative;
+            font-weight: 700;
+            margin-bottom: 50px;
+            color: var(--text-color);
         }
-        .light-mode .section-title { color: var(--primary-color); }
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-blue);
+            margin: 15px auto 0;
+            border-radius: 3px;
+        }
+
+        .subsection-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
 
         /* --- Hero Section --- */
         .hero {
@@ -120,127 +144,165 @@
             text-align: center;
             background: linear-gradient(135deg, var(--bg-color) 0%, var(--bg-light) 100%);
         }
-        .hero h3 { font-weight: 400; color: var(--text-light); margin-bottom: 10px; }
-        
-        .hero h1 { font-size: 3.5rem; font-weight: 700; color: var(--text-color); margin-bottom: 10px; }
-        .light-mode .hero h1 { color: var(--primary-color); }
-        
-        .tagline { font-size: 1.2rem; font-weight: 300; color: var(--text-light); margin-bottom: 30px; }
+        .hero h3 { font-weight: 400; color: var(--accent-blue); margin-bottom: 15px; font-family: monospace; font-size: 1.1rem; }
+        .hero h1 { font-size: 4rem; font-weight: 700; color: var(--text-color); margin-bottom: 10px; line-height: 1.1; }
+        .tagline { font-size: 1.2rem; font-weight: 400; color: var(--text-light); margin-bottom: 40px; max-width: 600px; margin-inline: auto; }
 
         .btn {
-            padding: 12px 28px;
-            border-radius: 30px;
+            padding: 14px 32px;
+            border-radius: 8px; 
             font-weight: 600;
             transition: var(--transition);
             display: inline-block;
             margin: 0 10px;
+            cursor: pointer;
         }
-        .btn-primary { background: var(--accent-blue); color: #fff; }
-        .btn-primary:hover { background: #1f5787; transform: translateY(-3px); }
-        .btn-secondary { border: 2px solid var(--accent-blue); color: var(--accent-blue); }
-        .btn-secondary:hover { background: var(--accent-blue); color: #fff; transform: translateY(-3px); }
+        .btn-primary { background: var(--accent-blue); color: var(--bg-color); border: 1px solid var(--accent-blue); }
+        .btn-primary:hover { background: transparent; color: var(--accent-blue); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(100, 255, 218, 0.2); }
+        .light-mode .btn-primary { color: #fff; }
+        .light-mode .btn-primary:hover { color: var(--accent-blue); }
+        
+        .btn-secondary { background: transparent; border: 1px solid var(--text-color); color: var(--text-color); }
+        .btn-secondary:hover { border-color: var(--accent-blue); color: var(--accent-blue); transform: translateY(-3px); }
 
-        /* --- About & Skills --- */
-        .about-content { text-align: center; font-size: 1.1rem; color: var(--text-light); max-width: 800px; margin: auto; }
-        .skills-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        /* --- About, Skills & Education --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+        .about-text p { font-size: 1.05rem; color: var(--text-light); line-height: 1.8; margin-bottom: 15px; }
+        .skills-container { display: flex; flex-wrap: wrap; gap: 12px; }
         .skill-badge {
-            background: var(--bg-light);
+            background: rgba(100, 255, 218, 0.05);
             border: 1px solid var(--accent-blue);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--accent-blue);
             transition: var(--transition);
         }
-        .skill-badge:hover { background: var(--accent-blue); color: #fff; }
+        .light-mode .skill-badge { background: rgba(0, 112, 243, 0.05); }
+        .skill-badge:hover { background: var(--accent-blue); color: var(--bg-color); }
+        .light-mode .skill-badge:hover { color: #fff; }
 
-        /* --- Resume (Grid Layout) --- */
-        .resume-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .resume-column h3 { margin-bottom: 20px; color: var(--accent-blue); }
+        /* --- Timeline --- */
         .timeline-item {
             border-left: 2px solid var(--accent-blue);
-            padding-left: 20px;
-            margin-bottom: 25px;
+            padding-left: 25px;
+            margin-bottom: 30px;
             position: relative;
         }
+        .timeline-item:last-child { margin-bottom: 0; }
         .timeline-item::before {
             content: '';
             position: absolute;
-            width: 12px;
-            height: 12px;
-            background: var(--accent-blue);
+            width: 14px;
+            height: 14px;
+            background: var(--bg-color);
+            border: 2px solid var(--accent-blue);
             border-radius: 50%;
-            left: -7px;
+            left: -8px;
             top: 5px;
         }
-        .timeline-item h4 { font-size: 1.1rem; color: var(--text-color); }
-        .timeline-item h5 { font-size: 0.9rem; font-weight: 400; color: var(--text-light); margin-bottom: 5px; }
-        .timeline-item p { font-size: 0.9rem; color: var(--text-light); }
+        .timeline-item h4 { font-size: 1.15rem; color: var(--text-color); }
+        .timeline-item h5 { font-size: 0.95rem; font-weight: 500; color: var(--accent-blue); margin: 5px 0; }
+        .timeline-item p { font-size: 0.95rem; color: var(--text-light); }
 
-        /* --- Lists (Awards, Pubs, Certs) --- */
-        .list-items li { 
-            margin-bottom: 15px; 
-            padding: 15px; 
-            background: var(--bg-light); 
-            border-radius: 8px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+        /* --- Premium Cards --- */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
         }
-        .light-mode .list-items li { background: var(--bg-color); }
 
-        /* --- Projects --- */
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; justify-items: center; }
-        .card {
-            background: var(--white);
+        .premium-card {
+            background: var(--bg-light);
             border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            padding: 30px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.5);
             transition: var(--transition);
-            border-top: 4px solid var(--accent-blue);
-            width: 100%;
-            max-width: 400px;
+            display: flex;
+            flex-direction: column;
         }
-        .card:hover { transform: translateY(-10px); }
-        .card h3 { margin-bottom: 10px; color: var(--text-color); }
-        .card p { color: var(--text-light); margin-bottom: 20px; font-size: 0.95rem; }
-        .card-link { color: var(--accent-blue); font-weight: 600; }
-        .card-link:hover { text-decoration: underline; }
+        .light-mode .premium-card { box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1); }
+        
+        .premium-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+            border-color: var(--accent-blue);
+        }
+        .light-mode .premium-card:hover { box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15); }
+
+        .card-img-wrapper {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        .photo-wrapper {
+            height: 250px;
+        }
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .premium-card:hover .card-img { transform: scale(1.05); }
+        
+        .card-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-category { font-family: monospace; color: var(--accent-blue); font-size: 0.85rem; margin-bottom: 10px; display: block; }
+        .card-title { font-size: 1.25rem; font-weight: 600; color: var(--text-color); margin-bottom: 5px; }
+        .card-subtitle { font-size: 0.95rem; color: var(--text-light); margin-bottom: 15px; font-weight: 500; }
+        .card-narrative { font-size: 0.95rem; color: var(--text-light); line-height: 1.7; flex-grow: 1; }
 
         /* --- Contact Section --- */
-        .contact-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .contact-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .contact-info p { color: var(--text-light); margin: 15px 0; font-size: 1.1rem; }
+        .email-link { display: inline-flex; align-items: center; gap: 10px; margin-top: 15px; font-size: 1.1rem; color: var(--accent-blue); font-weight: 600; }
+        .email-link::after { content: ""; display: block; width: 0; height: 1px; background: var(--accent-blue); transition: width 0.3s; position: absolute; bottom: -5px; }
+        .email-link:hover::after { width: 100%; }
         
-        .contact-info h3 { color: var(--text-color); }
-        .light-mode .contact-info h3 { color: var(--primary-color); }
-        
-        .contact-info p { color: var(--text-light); margin: 10px 0; }
-        .email-link { display: inline-block; margin-top: 15px; font-size: 1.1rem; color: var(--accent-blue); font-weight: 600; }
-        .contact-form form { display: flex; flex-direction: column; gap: 15px; }
+        .contact-form form { display: flex; flex-direction: column; gap: 20px; }
         .contact-form input, .contact-form textarea {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             border-radius: 8px;
-            border: none;
-            background: var(--bg-light);
+            border: 1px solid var(--card-border);
+            background: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
             outline: none;
+            transition: var(--transition);
         }
-        .light-mode .contact-form input, .light-mode .contact-form textarea { border: 1px solid #ccc; }
+        .contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.1); }
+        .light-mode .contact-form input:focus, .light-mode .contact-form textarea:focus { box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.1); }
 
         /* --- Footer --- */
-        footer { text-align: center; padding: 20px; background: #071121; color: #fff; font-size: 0.9rem; }
-        .light-mode footer { background: var(--primary-color); }
+        footer { text-align: center; padding: 25px; background: var(--bg-color); color: var(--text-light); font-size: 0.9rem; border-top: 1px solid var(--card-border); }
 
-        /* --- Animations & Utilities --- */
-        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        /* --- Animations --- */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .fade-in.appear { opacity: 1; transform: translateY(0); }
 
         /* --- Responsive --- */
-        @media (max-width: 768px) {
-            .nav-links { display: none; flex-direction: column; width: 100%; position: absolute; top: 100%; left: 0; background: var(--bg-light); padding: 20px; }
+        @media (max-width: 900px) {
+            .nav-links { display: none; flex-direction: column; width: 100%; position: absolute; top: 100%; left: 0; background: var(--bg-light); padding: 20px; border-bottom: 1px solid var(--card-border); }
             .nav-links.active { display: flex; }
             .hamburger { display: block; }
-            .hero h1 { font-size: 2.5rem; }
+            .about-grid { grid-template-columns: 1fr; gap: 40px; }
             .contact-wrapper { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -252,9 +314,10 @@
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="#resume">Resume</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#photography">Photography</a></li>
+                <li><a href="#achievements">Achievements</a></li>
+                <li><a href="#certifications">Certifications</a></li>
             </ul>
             <button id="theme-toggle" class="theme-btn"><i class="fa-solid fa-sun"></i></button>
             <div class="hamburger">
@@ -265,91 +328,135 @@
 
     <section id="home" class="hero">
         <div class="hero-content fade-in">
-            <h3>Halo, saya</h3>
+            <h3>Halo, Sobat Keker! saya</h3>
             <h1>Andi Farhan Fauzi</h1>
             <h2 class="tagline">Sociology Student | Research Enthusiast | Academic Writer</h2>
             <div class="hero-buttons">
-                <a href="#projects" class="btn btn-primary">View My Work</a>
-                <a href="#contact" class="btn btn-secondary">Contact Me</a>
+                <a href="#experience" class="btn btn-primary">Lihat Portfolio</a>
+                <a href="#contact" class="btn btn-secondary">Hubungi Saya</a>
             </div>
         </div>
     </section>
 
     <section id="about" class="section">
         <div class="container fade-in">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <p>Saya adalah Mahasiswa Sosiologi di Universitas Hasanuddin dengan IPK <strong>3.98</strong>. Saya memiliki minat yang mendalam dalam riset sosial, kesehatan mental, dan pengolahan data. Berdedikasi untuk terus belajar dan mengaplikasikan ilmu sosiologi dalam memecahkan masalah di masyarakat.</p>
-            </div>
+            <h2 class="section-title">Profil & Latar Belakang</h2>
             
-            <h2 class="section-title mt-5">Skills</h2>
-            <div class="skills-container">
-                <span class="skill-badge"><i class="fa-solid fa-users-viewfinder"></i> Field Research & Interviews</span>
-                <span class="skill-badge"><i class="fa-solid fa-pen-nib"></i> Academic Writing</span>
-                <span class="skill-badge"><i class="fa-solid fa-chart-pie"></i> Text Mining & Sentiment Analysis</span>
-                <span class="skill-badge"><i class="fa-solid fa-code"></i> Data Visualization (HTML/CSS/JS)</span>
-            </div>
-        </div>
-    </section>
-
-    <section id="resume" class="section bg-light">
-        <div class="container fade-in">
-            <h2 class="section-title">Education & Experience</h2>
-            
-            <div class="resume-grid">
-                <div class="resume-column">
-                    <h3><i class="fa-solid fa-graduation-cap"></i> Education</h3>
-                    <div class="timeline-item">
-                        <h4>S1 Sosiologi</h4>
-                        <h5>Universitas Hasanuddin (2022–2026)</h5>
-                        <p>GPA: 3.98 / 4.00</p>
-                    </div>
-                    <div class="timeline-item">
-                        <h4>Ilmu Pengetahuan Sosial (IPS)</h4>
-                        <h5>SMAN 1 Bone (2019–2022)</h5>
+            <div class="about-grid">
+                <div class="about-text">
+                    <h3 class="subsection-title">Tentang Saya</h3>
+                    <p>Saya adalah Mahasiswa Sosiologi di Universitas Hasanuddin dengan IPK <strong>3.98</strong>. Saya memiliki minat yang mendalam dalam riset sosial, kesehatan mental, dan pengolahan data.</p>
+                    <p>Berdedikasi untuk terus belajar dan mengaplikasikan ilmu sosiologi dalam memecahkan masalah kompleks di masyarakat modern melalui tulisan, analisis, fotografi, dan advokasi sosial.</p>
+                    
+                    <h3 class="subsection-title mt-4">Keahlian Inti</h3>
+                    <div class="skills-container">
+                        <span class="skill-badge"><i class="fa-solid fa-users-viewfinder"></i> Field Research</span>
+                        <span class="skill-badge"><i class="fa-solid fa-pen-nib"></i> Academic Writing</span>
+                        <span class="skill-badge"><i class="fa-solid fa-chart-pie"></i> Text Mining</span>
+                        <span class="skill-badge"><i class="fa-solid fa-code"></i> Data Visualization</span>
+                        <span class="skill-badge"><i class="fa-solid fa-camera"></i> Photography</span>
                     </div>
                 </div>
 
-                <div class="resume-column">
-                    <h3><i class="fa-solid fa-briefcase"></i> Experience</h3>
+                <div class="about-education">
+                    <h3 class="subsection-title">Riwayat Pendidikan</h3>
                     <div class="timeline-item">
-                        <h4>Research Assistant (2025)</h4>
-                        <p>Proyek: Studi prevalensi depresi di Makassar</p>
+                        <h4>Universitas Hasanuddin</h4>
+                        <h5>S1 Sosiologi (2022–2026)</h5>
+                        <p>Fokus pada sosiologi kontemporer dan metode penelitian. Lulus dengan predikat Cumlaude (GPA: 3.98/4.00).</p>
                     </div>
                     <div class="timeline-item">
-                        <h4>Research Assistant (2024)</h4>
-                        <p>Proyek: Borneo Shark & Rays Research</p>
-                    </div>
-                    <div class="timeline-item">
-                        <h4>Contributing Writer</h4>
-                        <p>Media: Kumparan & Harian Fajar</p>
-                    </div>
-                </div>
-
-                <div class="resume-column">
-                    <h3><i class="fa-solid fa-sitemap"></i> Organization</h3>
-                    <div class="timeline-item">
-                        <h4>Koordinator Research & People Dev. (2025)</h4>
-                        <p>Mental Health Research Community</p>
-                    </div>
-                    <div class="timeline-item">
-                        <h4>Koordinator Biro Kompetisi & Prestasi (2024)</h4>
-                        <p>PRM FISIP Unhas</p>
+                        <h4>SMAN 1 Bone</h4>
+                        <h5>Ilmu Pengetahuan Sosial (2019–2022)</h5>
+                        <p>Aktif dalam organisasi kesiswaan, kepemimpinan, dan berbagai kompetisi akademik tingkat regional.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="projects" class="section">
+    <section id="experience" class="section bg-light">
         <div class="container fade-in">
-            <h2 class="section-title">Projects</h2>
-            <div class="card-grid">
-                <div class="card">
+            <h2 class="section-title">Pengalaman & Proyek</h2>
+            
+            <div class="grid-layout">
+                <div class="premium-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Riset Lapangan" class="card-img">
+                    </div>
                     <div class="card-content">
-                        <h3>Website Profil Desa</h3>
-                        <p>Website statis untuk profil desa berbasis HTML/CSS.</p>
-                        <a href="https://desatanete.github.io/" target="_blank" class="card-link">Kunjungi Website <i class="fa-solid fa-arrow-right"></i></a>
+                        <span class="card-category">Research & Analysis</span>
+                        <h3 class="card-title">Research Assistant - Studi Depresi</h3>
+                        <h4 class="card-subtitle">Makassar, 2025</h4>
+                        <p class="card-narrative">Terlibat langsung dalam pengumpulan dan analisis data lapangan mengenai prevalensi depresi di kalangan masyarakat urban. Pengalaman ini mengasah empati dan ketajaman analisis sosiologis saya terhadap isu kesehatan mental secara langsung dari subjek penelitian.</p>
+                    </div>
+                </div>
+
+                <div class="premium-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Borneo Shark Research" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category">Field Research</span>
+                        <h3 class="card-title">Borneo Shark & Rays Research</h3>
+                        <h4 class="card-subtitle">Kalimantan, 2024</h4>
+                        <p class="card-narrative">Membantu observasi dan pencatatan ekologi kelautan. Melalui proyek ini, saya belajar pendekatan interdisipliner dalam melihat hubungan antara kehidupan sosial ekonomi nelayan pesisir dengan konservasi hiu dan pari.</p>
+                    </div>
+                </div>
+
+                <div class="premium-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Writing and Dev" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category">Media & Tech</span>
+                        <h3 class="card-title">Contributing Writer & Web Dev</h3>
+                        <h4 class="card-subtitle">Kumparan, Fajar, & Web Desa</h4>
+                        <p class="card-narrative">Menulis berbagai artikel opini yang diterbitkan di media nasional dan lokal. Selain itu, saya mengembangkan website statis untuk profil Desa Tanete guna membantu digitalisasi informasi tingkat desa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="photography" class="section">
+        <div class="container fade-in">
+            <h2 class="section-title">Karya Fotografi</h2>
+            
+            <div class="grid-layout">
+                <div class="premium-card">
+                    <div class="card-img-wrapper photo-wrapper">
+                        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Street Photography" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category"><i class="fa-solid fa-camera-retro"></i> Street Photography</span>
+                        <h3 class="card-title">Dinamika Urban</h3>
+                        <h4 class="card-subtitle">Makassar, 2025</h4>
+                        <p class="card-narrative">Menangkap realitas sosial dan hiruk-pikuk kehidupan pinggir jalan. Karya ini merupakan perpaduan antara observasi sosiologis dan seni visual, memperlihatkan interaksi otentik masyarakat di ruang publik secara candid.</p>
+                    </div>
+                </div>
+
+                <div class="premium-card">
+                    <div class="card-img-wrapper photo-wrapper">
+                        <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Human Interest" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category"><i class="fa-solid fa-image"></i> Human Interest</span>
+                        <h3 class="card-title">Wajah Pekerja Pesisir</h3>
+                        <h4 class="card-subtitle">Kalimantan, 2024</h4>
+                        <p class="card-narrative">Sebuah dokumentasi visual tentang ketangguhan nelayan lokal. Melalui lensa, saya berusaha menceritakan narasi yang tidak tertulis tentang perjuangan kelas pekerja dan hubungan erat mereka dengan alam sekitar.</p>
+                    </div>
+                </div>
+
+                <div class="premium-card">
+                    <div class="card-img-wrapper photo-wrapper">
+                        <img src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Nature and Society" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category"><i class="fa-solid fa-leaf"></i> Nature & Society</span>
+                        <h3 class="card-title">Ekologi Kultural</h3>
+                        <h4 class="card-subtitle">Sulawesi Selatan, 2023</h4>
+                        <p class="card-narrative">Potret lanskap yang mengeksplorasi pergeseran tata guna lahan di pedesaan. Foto ini tidak sekadar estetika, melainkan juga berfungsi sebagai arsip visual perubahan lingkungan sosial masyarakat agraris.</p>
                     </div>
                 </div>
             </div>
@@ -358,53 +465,110 @@
 
     <section id="achievements" class="section bg-light">
         <div class="container fade-in">
-            <div class="resume-grid">
-                <div class="resume-column">
-                    <h2 class="section-title text-left">Awards</h2>
-                    <ul class="list-items">
-                        <li><i class="fa-solid fa-medal text-accent"></i> Medali Perunggu PIMNAS ke-36 (2023)</li>
-                        <li><i class="fa-solid fa-award text-accent"></i> Hibah PKM Kemendikbud (2023 & 2024)</li>
-                        <li><i class="fa-solid fa-trophy text-accent"></i> Juara 1 Lomba Esai Nasional (2023)</li>
-                    </ul>
+            <h2 class="section-title">Pencapaian & Publikasi</h2>
+            
+            <div class="grid-layout">
+                <div class="premium-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1561489422-45de3d015e3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="PIMNAS 36" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category"><i class="fa-solid fa-medal"></i> Award</span>
+                        <h3 class="card-title">Medali Perunggu PIMNAS 36</h3>
+                        <h4 class="card-subtitle">Kemendikbud Ristek, 2023</h4>
+                        <p class="card-narrative">Berhasil meraih medali perunggu tingkat nasional pada Pekan Ilmiah Mahasiswa Nasional ke-36 setelah melewati seleksi ketat pendanaan PKM. Riset inovatif yang kami bawakan mendapat apresiasi tinggi dari para juri.</p>
+                    </div>
                 </div>
 
-                <div class="resume-column">
-                    <h2 class="section-title text-left">Publications</h2>
-                    <ul class="list-items">
-                        <li><i class="fa-solid fa-book text-accent"></i> Publikasi Scopus Q4 tentang prevalensi depresi di Makassar</li>
-                        <li><i class="fa-solid fa-file-lines text-accent"></i> Paper WCGSS tentang dampak AI dalam pendidikan</li>
-                    </ul>
+                <div class="premium-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Scopus Publication" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category"><i class="fa-solid fa-book"></i> Publication</span>
+                        <h3 class="card-title">Publikasi Scopus Q4</h3>
+                        <h4 class="card-subtitle">Jurnal Internasional</h4>
+                        <p class="card-narrative">Penulis dalam artikel penelitian kolaboratif mengenai prevalensi depresi di Makassar yang berhasil menembus jurnal bereputasi internasional. Paper ini menyoroti urgensi penanganan kesehatan mental.</p>
+                    </div>
                 </div>
 
-                <div class="resume-column">
-                    <h2 class="section-title text-left">Certifications</h2>
-                    <ul class="list-items">
-                        <li><i class="fa-solid fa-certificate text-accent"></i> Prompt Engineering – Dicoding</li>
-                        <li><i class="fa-solid fa-certificate text-accent"></i> IBM Data Classification</li>
-                        <li><i class="fa-solid fa-certificate text-accent"></i> Design Thinking Academy</li>
-                    </ul>
+                <div class="premium-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Essay Competition" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category"><i class="fa-solid fa-trophy"></i> Competition</span>
+                        <h3 class="card-title">Juara 1 Lomba Esai Nasional</h3>
+                        <h4 class="card-subtitle">Tingkat Mahasiswa, 2023</h4>
+                        <p class="card-narrative">Memenangkan juara pertama melalui gagasan tertulis yang kritis dan solutif terhadap isu-isu sosial kontemporer, bersaing dengan ratusan mahasiswa dari berbagai universitas di seluruh Indonesia.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="section">
+    <section id="certifications" class="section">
         <div class="container fade-in">
-            <h2 class="section-title">Contact Me</h2>
+            <h2 class="section-title">Sertifikasi Profesional</h2>
+            
+            <div class="grid-layout">
+                <div class="premium-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Prompt Engineering" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category"><i class="fa-solid fa-certificate"></i> AI & Tech</span>
+                        <h3 class="card-title">Prompt Engineering</h3>
+                        <h4 class="card-subtitle">Dicoding Indonesia</h4>
+                        <p class="card-narrative">Mempelajari teknik komunikasi optimal dengan model kecerdasan buatan untuk menghasilkan output yang presisi. Keterampilan ini sangat menunjang efisiensi dalam riset, analisis data literatur, dan pembuatan visual kreatif.</p>
+                    </div>
+                </div>
+
+                <div class="premium-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Data Classification" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category"><i class="fa-solid fa-database"></i> Data Science</span>
+                        <h3 class="card-title">Data Classification</h3>
+                        <h4 class="card-subtitle">IBM Academy</h4>
+                        <p class="card-narrative">Sertifikasi dalam metodologi klasifikasi dan pemrosesan data menggunakan standar industri IBM. Sangat relevan untuk diterapkan pada metode text mining dan analisis sentimen pada penelitian kuantitatif sosiologi.</p>
+                    </div>
+                </div>
+
+                <div class="premium-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Design Thinking" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category"><i class="fa-solid fa-lightbulb"></i> Problem Solving</span>
+                        <h3 class="card-title">Design Thinking</h3>
+                        <h4 class="card-subtitle">Design Thinking Academy</h4>
+                        <p class="card-narrative">Menguasai kerangka kerja inovasi yang berpusat pada manusia (human-centered design). Membantu saya dalam merumuskan solusi berbasis empati terhadap permasalahan sosial yang ditemukan di lapangan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section bg-light">
+        <div class="container fade-in">
+            <h2 class="section-title">Hubungi Saya</h2>
             <div class="contact-wrapper">
                 <div class="contact-info">
-                    <h3>Let's Connect!</h3>
-                    <p>Kabupaten Gowa, Provinsi Sulawesi Selatan, Indonesia</p>
-                    <a href="mailto:andifarhanfauzi31@gmail.com" class="email-link">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 10px;">Mari Berkolaborasi!</h3>
+                    <p>Tertarik untuk mendiskusikan riset, proyek kolaborasi, ngobrol soal game, atau peluang profesional? Jangan ragu untuk menghubungi saya melalui email atau tinggalkan pesan melalui formulir di samping.</p>
+                    <p><i class="fa-solid fa-location-dot text-accent"></i> Kab. Gowa, Sulawesi Selatan, Indonesia</p>
+                    <a href="mailto:andifarhanfauzi31@gmail.com" class="email-link" style="position: relative;">
                         <i class="fa-solid fa-envelope"></i> andifarhanfauzi31@gmail.com
                     </a>
                 </div>
                 <div class="contact-form">
                     <form id="simpleForm">
-                        <input type="text" placeholder="Nama Anda" required>
-                        <input type="email" placeholder="Email Anda" required>
-                        <textarea rows="5" placeholder="Pesan Anda" required></textarea>
-                        <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                        <input type="text" placeholder="Nama Lengkap Anda" required>
+                        <input type="email" placeholder="Alamat Email Anda" required>
+                        <textarea rows="5" placeholder="Pesan atau Tawaran Kerja Sama..." required></textarea>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Kirim Pesan</button>
                     </form>
                 </div>
             </div>
@@ -412,7 +576,7 @@
     </section>
 
     <footer>
-        <p>&copy; 2026 Andi Farhan Fauzi. All Rights Reserved.</p>
+        <p>&copy; 2026 Andi Farhan Fauzi. Designed with precision & purpose.</p>
     </footer>
 
     <script>
@@ -426,12 +590,11 @@
             }
         });
 
-        // --- Mode Toggle (Default Gelap ke Terang) ---
+        // --- Mode Toggle ---
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
         const icon = themeToggle.querySelector('i');
 
-        // Cek preferensi user sebelumnya (sekarang kita cek jika user memilih light)
         if (localStorage.getItem('theme') === 'light') {
             body.classList.add('light-mode');
             icon.classList.replace('fa-sun', 'fa-moon');
@@ -448,13 +611,9 @@
             }
         });
 
-        // --- Fade-in Animation on Scroll (Intersection Observer) ---
+        // --- Fade-in Animation on Scroll ---
         const faders = document.querySelectorAll('.fade-in');
-
-        const appearOptions = {
-            threshold: 0.15,
-            rootMargin: "0px 0px -50px 0px"
-        };
+        const appearOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
 
         const appearOnScroll = new IntersectionObserver(function(entries, observer) {
             entries.forEach(entry => {
@@ -464,9 +623,7 @@
             });
         }, appearOptions);
 
-        faders.forEach(fader => {
-            appearOnScroll.observe(fader);
-        });
+        faders.forEach(fader => { appearOnScroll.observe(fader); });
 
         // --- Prevent Default on Simple Form ---
         const simpleForm = document.getElementById('simpleForm');
@@ -476,7 +633,7 @@
             simpleForm.reset();
         });
 
-        // --- Hamburger Menu Toggle (Mobile) ---
+        // --- Hamburger Menu Toggle ---
         const hamburger = document.querySelector('.hamburger');
         const navLinks = document.querySelector('.nav-links');
         
